@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Craft CMS Migration Pricing</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: rgb(249, 250, 251);
+            min-height: 100vh;
+            padding: 3rem 1rem;
+        }
+
+        /* Container styles */
+        .container {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header styles */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.25rem;
+            font-weight: bold;
+            color: rgb(17, 24, 39);
+        }
+
+        .header p {
+            margin-top: 1rem;
+            color: rgb(107, 114, 128);
+        }
+
+        /* Table styles */
+        .table-container {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-size: 0.875rem;
+            border-bottom: 1px solid rgb(229, 231, 235);
+        }
+
+        th {
+            background-color: rgb(249, 250, 251);
+            font-weight: 600;
+            color: rgb(17, 24, 39);
+        }
+
+        .plan-header {
+            text-align: center;
+        }
+
+        .plan-subtitle {
+            color: rgb(107, 114, 128);
+            font-weight: normal;
+        }
+
+        .plan-price {
+            margin-top: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .plan-donation {
+            color: rgb(22, 163, 74);
+            font-size: 0.875rem;
+            font-weight: normal;
+        }
+
+        /* Section headers */
+        .section-header {
+            background-color: rgb(249, 250, 251);
+            font-weight: 600;
+        }
+		
+        tr.section-header td {
+            font-size: 20px !important;
+        }
+
+        /* Row styles */
+        .clickable-row {
+            cursor: pointer;
+        }
+
+        .clickable-row:hover {
+            background-color: rgb(249, 250, 251);
+        }
+
+        .carat {
+            display: inline-block;
+            margin-right: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .carat.expanded {
+            transform: rotate(90deg);
+        }
+
+        .center-align {
+            text-align: center;
+        }
+
+        /* Expanded row styles */
+        .expanded-row {
+            background-color: rgb(239, 246, 255);
+            border-top: 1px solid rgb(219, 234, 254);
+            border-bottom: 1px solid rgb(219, 234, 254);
+        }
+
+        .expanded-content {
+            padding: 1.5rem 2rem;
+            font-size: 1rem;
+            color: rgb(30, 58, 138);
+            line-height: 1.625;
+            max-width: 48rem;
+        }
+
+        /* Total row styles */
+        .total-row td {
+            font-weight: bold;
+            border-top: 2px solid rgb(229, 231, 235);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Craft CMS Migration Options</h1>
+            <p>Click any row to see more details</p>
+        </div>
+
+        <div class="table-container">
+            <div class="table-scroll">
+                <table id="pricing-table">
+                    <!-- Main pricing table content -->
+                </table>
+            </div>
+        </div>
+
+        <div class="header">
+            <h1>Recurring Maintenance & Hard Costs</h1>
+            <p>Annual costs for maintaining the platform</p>
+        </div>
+
+        <div class="table-container">
+            <div class="table-scroll">
+                <table id="recurring-costs-table">
+                    <!-- Recurring costs table content -->
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const plans = [
+            {
+                title: "Original Presentation",
+                subtitle: "Old Sites Migrated to Craft CMS",
+                price: 30600,
+                donation: 26900,
+            },
+            {
+                title: "New Request",
+                subtitle: "New Sites (without Navigator)",
+                price: 63270,
+                donation: 47880,
+            },
+            {
+                title: "New Request",
+                subtitle: "New Sites (with Navigator)",
+                price: 64495,
+                donation: 42280,
+            }
+        ];
+
+        const recurringItems = [
+            { 
+                name: "CMS License, Management, & Maintenance", 
+                description: "This is the annual cost required for CraftCMS and associated technologies, in order to renew licenses and manage and maintain features and compatibility.", 
+                values: ["$4,000", "$4,000", "$4,000"] 
+            },
+            { 
+                name: "Website Hosting", 
+                description: "This annual cost is associated with a dedicated server on Amazon AWS to house both the Volvo and Mack websites.", 
+                values: ["$4,800", "$4,800", "$4,800"] 
+            },
+            { 
+                name: "Translation Service", 
+                description: "This is the estimated annual cost for the GTranslate language translation plugin.", 
+                values: ["Not included", "$720", "$720"] 
+            }
+        ];
+
+        const lineItems = [
+            { name: "Content Strategy", description: "This refers to the discovery, sitemap, and scope process to strategize the new pages and approach on a new website based on client objectives and analytics learnings.", values: ["Free (normally $6,500)", "Free (normally $6,500)", "Free (normally $6,500)"] },
+            { name: "Design", description: "Volvo and Mack will each get a brand new, fresh website design. Volvo and Mack will each share general templates, but with customized colors and branding. Each design will include a set of new templates and 'blocks' which can be reused on multiple pages.", values: ["No new design", "$18,550", "$18,550"] },
+            { name: "Front-End Development", description: "The new website design will require new HTML/CSS coding, referred to as 'front-end development'.", values: ["No new front-end", "$14,000", "$14,000"] },
+            { name: "Back-End Development", description: "All development work connecting the front-end templates into CraftCMS represents 'back-end development'.", values: ["$21,500", "$28,325", "$28,325"] },
+            { name: "Content Migration", description: "Content on the existing Volvo and Mack websites will have to be manually ported to the new websites, including all text and graphics.", values: ["$29,500", "$35,000", "$21,000"] },
+            { name: "Content Syndication", description: "This feature refers to certain content types being syndicated from the Volvo website to the Mack site—an additional toggle in the Volvo CMS will be included called 'Send to Mack', which, when selected, would send the relevant content to the Mack CMS.", values: ["Not included", "$7,575", "$7,575"] },
+            { name: "Live Automated Translations", description: "Using GTranslate, all web content will be automatically translated to any selected language.", values: ["Not included", "$1,200", "$1,200"] },
+            { name: "Navigator Integration", description: "If allowed by the Volvo IT team, Click Rain will work with the Cornerstone OnDemand platform to bring content about selected courses into the CraftCMS back-end, negating the need for copy-pasting all of the data.", values: ["Not included", "Not included", "$9,625"] },
+            { name: "Discount", description: "Thanks to Lemonly's long-term partnership with the Volvo and Mack team, we are pleased to offer a long-term partner discount in order to make this website transition happen.", values: ["-$20,400", "-$41,380", "-$35,780"] }
+        ];
+
+        const features = [
+            { name: "High Performance Pages", description: "Click Rain websites are built around speed and performance. High-performance sites mean improved rankings on search and better user experience.", values: ["Yes", "Yes", "Yes"] },
+            { name: "Optimized for SEO", description: "Every CR site is designed, developed, and written with search engines in mind. This can yield improved organic search traffic and rankings.", values: ["Yes", "Yes", "Yes"] },
+            { name: "ADA Accessible", description: "Accessibility is important for legal reasons, but more than that, it's the right thing to do. Click Rain will build the new Volvo and Mack sites at WCAG AA-level accessibility.", values: ["Yes", "Yes", "Yes"] },
+            { name: "Latest Web Technology", description: "A new website will ensure that Volvo and Mack have the latest, most secure web technology.", values: ["Included", "Included", "Included"] },
+            { name: "Restructured Content", description: "Click Rain has already completed a full discovery and sitemap for the new Volvo and Mack websites, with new, revised, and consolidated pages designed around improved content strategy and future objectives.", values: ["Yes", "Yes", "Yes"] },
+            { name: "Strategy Based on Analytics", description: "The new sitemap has also been created based on learnings and insights from Google Analytics data on the current site, based on existing user behavior.", values: ["Yes", "Yes", "Yes"] },
+            { name: "Scalability for Future Sites", description: "The new sites will be created in a way that will make them extra scalable for adding on additional Volvo/Mack family sites in the future, such as Mack Export.", values: ["Good", "Best", "Best"] },
+            { name: "Flexible for New Requests", description: "After multiple years of working together, Lemonly understands the type of updates that the Volvo and Mack sites will need. The new sites have been designed for those types of updates to be easy and efficient.", values: ["Yes", "Yes", "Yes"] },
+            { name: "Updated for Timely Updates", description: "Because CraftCMS is supported in-house at Lemonly and Click Rain, updates can be made directly by our team vs. having to work with an outside freelancer. This means an improved response time and more agile updates.", values: ["Yes", "Yes", "Yes"] }
+        ];
+
+        function createTableHeader() {
+            const thead = document.createElement('thead');
+            const tr = document.createElement('tr');
+
+            const th = document.createElement('th');
+            th.textContent = 'Plan Details';
+            tr.appendChild(th);
+
+            plans.forEach(plan => {
+                const th = document.createElement('th');
+                th.className = 'plan-header';
+                th.innerHTML = `
+                    <div>${plan.title}</div>
+                    <div class="plan-subtitle">${plan.subtitle}</div>
+                    <div class="plan-price">$${plan.price.toLocaleString()}</div>
+                    <div class="plan-donation">Donation: $${plan.donation.toLocaleString()}</div>
+                `;
+                tr.appendChild(th);
+            });
+
+            thead.appendChild(tr);
+            return thead;
+        }
+
+        function createRecurringTableHeader() {
+            const thead = document.createElement('thead');
+            const tr = document.createElement('tr');
+
+            const th = document.createElement('th');
+            th.textContent = 'Plan Details';
+            tr.appendChild(th);
+
+            plans.forEach(plan => {
+                const th = document.createElement('th');
+                th.className = 'plan-header';
+                th.innerHTML = `
+                    <div>${plan.title}</div>
+                    <div class="plan-subtitle">${plan.subtitle}</div>
+                    <div class="plan-price">$8,800</div>
+                    <div class="plan-subtitle">Annual Cost</div>
+                `;
+                if (plan.title === "New Request") {
+                    th.querySelector('.plan-price').textContent = '$9,520';
+                }
+                tr.appendChild(th);
+            });
+
+            thead.appendChild(tr);
+            return thead;
+        }
+
+        function createTableRow(item, isHeader = false) {
+            const tr = document.createElement('tr');
+            
+            if (isHeader) {
+                tr.className = 'section-header';
+                const td = document.createElement('td');
+                td.colSpan = 4;
+                td.textContent = item;
+                tr.appendChild(td);
+                return tr;
+            }
+
+            tr.className = 'clickable-row';
+            tr.id = `row-${item.name.replace(/\s+/g, '-').toLowerCase()}`;
+            
+            const nameTd = document.createElement('td');
+            const carat = document.createElement('span');
+            carat.className = 'carat';
+            carat.textContent = '▶';
+            nameTd.appendChild(carat);
+            nameTd.appendChild(document.createTextNode(item.name));
+            tr.appendChild(nameTd);
+
+            item.values.forEach(value => {
+                const td = document.createElement('td');
+                td.className = 'center-align';
+                td.textContent = value;
+                tr.appendChild(td);
+            });
+
+            tr.onclick = function() {
+                handleRowClick(item.name);
+            };
+
+            return tr;
+        }
+
+        function createTotalRow(label, values) {
+            const tr = document.createElement('tr');
+            tr.className = 'total-row';
+            
+            const labelTd = document.createElement('td');
+            labelTd.textContent = label;
+            tr.appendChild(labelTd);
+
+            values.forEach(value => {
+                const td = document.createElement('td');
+                td.className = 'center-align';
+                td.textContent = value;
+                tr.appendChild(td);
+            });
+
+            return tr;
+        }
+
+        function createExpandedRow(description) {
+            const tr = document.createElement('tr');
+            tr.className = 'expanded-row';
+            const td = document.createElement('td');
+            td.colSpan = 4;
+            td.innerHTML = `<div class="expanded-content">${description}</div>`;
+            tr.appendChild(td);
+            return tr;
+        }
+
+        let expandedRowName = null;
+
+        function handleRowClick(rowName) {
+            // Remove any existing expanded rows
+            const existingExpanded = document.querySelector('.expanded-row');
+            if (existingExpanded) {
+                existingExpanded.remove();
+            }
+
+            // Reset all carats
+            document.querySelectorAll('.carat').forEach(carat => {
+                carat.textContent = '▶';
+                carat.classList.remove('expanded');
+            });
+
+            // If clicking the same row, just collapse it
+            if (expandedRowName === rowName) {
+                expandedRowName = null;
+                return;
+            }
+
+            // Find the clicked row
+            const row = document.getElementById(`row-${rowName.replace(/\s+/g, '-').toLowerCase()}`);
+            if (!row) return;
+
+            // Find the item data
+            const item = [...features, ...lineItems, ...recurringItems].find(item => item.name === rowName);
+            if (!item) return;
+
+            // Create and insert expanded row
+            const expandedRow = createExpandedRow(item.description);
+            row.after(expandedRow);
+
+            // Update carat
+            const carat = row.querySelector('.carat');
+            carat.textContent = '▼';
+            carat.classList.add('expanded');
+
+            expandedRowName = rowName;
+        }
+
+        function initializeTables() {
+            // Initialize main pricing table
+            const pricingTable = document.getElementById('pricing-table');
+            const pricingThead = createTableHeader();
+            const pricingTbody = document.createElement('tbody');
+
+            // Features section
+            pricingTbody.appendChild(createTableRow('Features', true));
+            features.forEach(feature => {
+                pricingTbody.appendChild(createTableRow(feature));
+            });
+
+            // Pricing Breakdown section
+            pricingTbody.appendChild(createTableRow('Pricing Breakdown', true));
+            lineItems.forEach(item => {
+                pricingTbody.appendChild(createTableRow(item));
+            });
+
+            pricingTable.appendChild(pricingThead);
+            pricingTable.appendChild(pricingTbody);
+
+            // Initialize recurring costs table
+            const recurringTable = document.getElementById('recurring-costs-table');
+            const recurringThead = createRecurringTableHeader();
+            const recurringTbody = document.createElement('tbody');
+
+            // Recurring costs section
+            recurringItems.forEach(item => {
+                recurringTbody.appendChild(createTableRow(item));
+            });
+
+
+
+            recurringTable.appendChild(recurringThead);
+            recurringTable.appendChild(recurringTbody);
+        }
+
+        // Initialize both tables when the page loads
+        document.addEventListener('DOMContentLoaded', initializeTables);
+    </script>
+</body>
+</html>
